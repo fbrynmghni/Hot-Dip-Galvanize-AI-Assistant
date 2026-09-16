@@ -8,6 +8,14 @@ praktis — dari "berapa ketebalan coating minimum untuk plat 10 mm?" sampai
 Sumber pengetahuan utama: **AGA** (https://galvanizeit.org/) dan **GAA**
 (https://gaa.com.au/).
 
+> **Status proyek: portofolio & edukasi, bukan produk komersial.** Tidak ada
+> rencana monetisasi — fase "Monetisasi" di roadmap versi awal sudah dihapus.
+> Karena itu, angka standar **hanya** boleh bersumber dari halaman terbuka di
+> website (artikel AGA/GAA dan asosiasi galvanizing sejenis), **tidak pernah**
+> dari teks ASTM/ISO/AS-NZS yang dibeli/berbayar — lihat aturan #12 dan skill
+> `hdg-standards-config`. Konsekuensinya: config akan tetap `unverified: true`
+> tanpa batas waktu, bukan menunggu seseorang membeli salinan standar.
+
 > Blueprint naratif versi 1 yang utuh diarsipkan di `docs/blueprint-v1.md`.
 > Detail prosedural aktif ada di `.claude/skills/` — lihat peta skill di bawah.
 
@@ -170,7 +178,9 @@ Struktur halaman knowledge hub ada di
 | **1 – MVP** | 3–4 minggu | Ingestion AGA+GAA, chat RAG + sitasi, 3 kalkulator, 10 halaman hub |
 | **2 – Kualitas** | 3 minggu | Hybrid search + rerank, golden set 150, dashboard eval, glosarium ID–EN |
 | **3 – Pro features** | 4–6 minggu | Vent advisor, defect photo triage, export laporan PDF, konteks Indonesia |
-| **4 – Monetisasi (opsional)** | — | Paket fabricator/galvanizer: kuota chat, white-label, integrasi QC |
+
+Proyek ini portofolio & edukasi — **tidak ada fase monetisasi**. Fitur seperti
+kuota chat, white-label, atau integrasi QC berbayar tidak masuk roadmap.
 
 ---
 

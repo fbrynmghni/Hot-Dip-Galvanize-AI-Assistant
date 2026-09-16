@@ -84,11 +84,11 @@ sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 | 3.3 | Export laporan PDF | ⬜ Belum |
 | 3.4 | Konteks Indonesia (SNI, harga lokal) | ⬜ Belum |
 
-### Fase 4 — Monetisasi (opsional)
+### Fase 4 — dihapus
 
-| # | Item | Status |
-|---|---|---|
-| 4.1 | Paket fabricator/galvanizer (kuota, white-label, integrasi QC) | ⬜ Belum |
+Proyek ini portofolio & edukasi, bukan produk komersial — **tidak ada rencana
+monetisasi**. Fase "Monetisasi (opsional)" di roadmap versi awal sudah
+dihapus dari cakupan.
 
 ### Ringkasan Terms of Use / Disclaimer (dibaca 2026-09-16, belum ada izin tertulis)
 
