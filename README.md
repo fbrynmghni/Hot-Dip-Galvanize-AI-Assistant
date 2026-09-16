@@ -112,8 +112,8 @@ golden set, dan perubahan aturan system prompt juga.
 |---|---|
 | Framework | Next.js 15 + TypeScript |
 | UI | Tailwind CSS + shadcn/ui |
-| LLM | Claude API (`claude-sonnet-5`) |
-| Embedding | Voyage AI / model embedding multilingual |
+| LLM | OpenAI API (`gpt-5.5`) |
+| Embedding | OpenAI `text-embedding-3-large` |
 | Vector DB | Supabase Postgres + pgvector |
 | Re-ranking | Cohere Rerank / Voyage rerank |
 | Ingestion | Python (httpx, trafilatura, pdfplumber) |
