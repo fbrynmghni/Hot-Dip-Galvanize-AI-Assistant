@@ -1,0 +1,17 @@
+{
+  "standard": "ISO 9223 (laju korosi zinc)",
+  "edition": "ISI_EDISI_YANG_DIVERIFIKASI",
+  "verified_by": null,
+  "verified_at": null,
+  "unverified": true,
+  "unit": "um_per_year",
+  "rates": {
+    "C1": [0,   0.1],
+    "C2": [0.1, 0.7],
+    "C3": [0.7, 2.1],
+    "C4": [2.1, 4.2],
+    "C5": [4.2, 8.4],
+    "CX": [8.4, 25]
+  },
+  "_method_note": "Konsumsi linear adalah penyederhanaan. Definisi AGA time-to-first-maintenance (~5% permukaan menunjukkan karat baja dasar) memberi hasil berbeda. Output tool wajib berupa rentang + rujukan ke GAA Durability Estimator / AGA LCCC."
+}

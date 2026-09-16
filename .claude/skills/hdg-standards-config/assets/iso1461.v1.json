@@ -1,0 +1,19 @@
+{
+  "standard": "ISO 1461",
+  "edition": "ISI_EDISI_YANG_DIVERIFIKASI",
+  "verified_by": null,
+  "verified_at": null,
+  "unverified": true,
+  "scope": "non-centrifuged articles",
+  "rows": [
+    { "min": 6.0, "min_incl": false, "max": null, "max_incl": false, "local_um": 70, "mean_um": 85 },
+    { "min": 3.0, "min_incl": false, "max": 6.0,  "max_incl": true,  "local_um": 55, "mean_um": 70 },
+    { "min": 1.5, "min_incl": true,  "max": 3.0,  "max_incl": true,  "local_um": 45, "mean_um": 55 },
+    { "min": 0.0, "min_incl": true,  "max": 1.5,  "max_incl": false, "local_um": 35, "mean_um": 45 }
+  ],
+  "castings": [
+    { "min": 6.0, "min_incl": true,  "max": null, "max_incl": false, "local_um": 70, "mean_um": 80 },
+    { "min": 0.0, "min_incl": true,  "max": 6.0,  "max_incl": false, "local_um": 60, "mean_um": 70 }
+  ],
+  "_boundary_note": "Batas 1,5 mm BERBEDA dari AS/NZS 4680 (di sini >= 1,5 masuk kelas 45/55). Jangan digabung ke satu file."
+}
