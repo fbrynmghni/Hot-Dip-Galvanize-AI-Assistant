@@ -38,24 +38,75 @@ berbeda — tergantung standar dan kategori materialnya.
 
 ## Status
 
-**Fase 0 — Persiapan.** Blueprint dan disiplin engineering sudah terkunci
-sebagai skill; aplikasinya belum di-scaffold.
+**Fase 0 — Persiapan**, hampir selesai. Blueprint dan disiplin engineering
+sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 
-- [x] Blueprint teknis & produk
-- [x] Skill engineering (6 skill + referensi + template)
-- [x] Config standar awal (ASTM A123, ISO 1461, AS/NZS 4680, ISO 9223) — **belum diverifikasi**
-- [ ] Verifikasi tabel standar ke dokumen asli
-- [ ] Review Terms of Use AGA/GAA & permohonan izin
-- [ ] Scaffold aplikasi Next.js
-- [ ] Kalkulator + unit test titik batas
-- [ ] Pipeline ingestion & retrieval
-- [ ] Chat orchestrator
-- [ ] Deployment
+| # | Item | Status | Catatan |
+|---|---|---|---|
+| 0.1 | Blueprint teknis & produk | ✅ Selesai | `docs/blueprint-v1.md` |
+| 0.2 | Skill engineering (6 skill + referensi + template) | ✅ Selesai | `.claude/skills/` |
+| 0.3 | Config standar awal (draft) | ✅ Selesai | ASTM A123, ISO 1461, AS/NZS 4680, ISO 9223 |
+| 0.4 | Sitasi sumber terbuka (bukan teks standar berbayar) | ✅ Selesai | AGA/GAA/UK Galvanizers Association, lihat `references/iso-asnzs.md` |
+| 0.5 | Verifikasi resmi (`verified_by`/`verified_at`) | ⬜ Belum | Butuh sign-off engineer yang pegang salinan sah, **atau** proyek berjalan permanen dengan status `unverified` |
+| 0.6 | Ambiguitas batas 1,5 mm ISO 1461 | ⬜ Belum | 2 sumber terbuka berbeda arah; sudah di-flag sebagai unconfirmed test case |
+| 0.7 | Review Terms of Use AGA & Disclaimer GAA | 🟡 Sebagian | Sudah dibaca — lihat ringkasan di bawah. Email permohonan izin **belum dikirim** |
+| 0.8 | Scaffold aplikasi Next.js | ⬜ Belum | |
 
 > ⚠️ **Angka standar di repo ini belum diverifikasi.** Semua config ditandai
 > `"unverified": true` dan `verified_by: null`. Selama flag itu ada, output tool
 > wajib membawanya sampai ke jawaban. Jangan dipakai sebagai dasar keputusan
 > inspeksi sebelum diverifikasi ke edisi standar yang dimiliki secara sah.
+
+### Fase 1 — MVP
+
+| # | Item | Status |
+|---|---|---|
+| 1.1 | Ingestion AGA + GAA (crawl → clean → chunk → embed) | ⬜ Belum |
+| 1.2 | Chat RAG + tool calling + sitasi | ⬜ Belum |
+| 1.3 | 3 kalkulator (thickness, durability, reactivity) | ⬜ Belum |
+| 1.4 | 10 halaman knowledge hub | ⬜ Belum |
+
+### Fase 2 — Kualitas
+
+| # | Item | Status |
+|---|---|---|
+| 2.1 | Hybrid search + re-ranking | ⬜ Belum |
+| 2.2 | Golden set 150 kasus | ⬜ Belum |
+| 2.3 | Dashboard eval (faithfulness, citation accuracy) | ⬜ Belum |
+| 2.4 | Glosarium ID–EN | ⬜ Belum |
+
+### Fase 3 — Pro features
+
+| # | Item | Status |
+|---|---|---|
+| 3.1 | Vent hole advisor | ⬜ Belum |
+| 3.2 | Defect photo triage | ⬜ Belum |
+| 3.3 | Export laporan PDF | ⬜ Belum |
+| 3.4 | Konteks Indonesia (SNI, harga lokal) | ⬜ Belum |
+
+### Fase 4 — Monetisasi (opsional)
+
+| # | Item | Status |
+|---|---|---|
+| 4.1 | Paket fabricator/galvanizer (kuota, white-label, integrasi QC) | ⬜ Belum |
+
+### Ringkasan Terms of Use / Disclaimer (dibaca 2026-09-16, belum ada izin tertulis)
+
+- **AGA** ([Terms of Use](https://galvanizeit.org/about-aga/terms-of-use)) —
+  memegang hak cipta (`© 2026 AGA`); konten "general information only";
+  mereferensikan dokumen terpisah "Copyright and Proprietary Information Use
+  Policy" yang tidak ditemukan teksnya secara publik. Tidak ada klausul
+  eksplisit soal crawling otomatis atau penggunaan oleh AI di teks yang
+  terbaca. AGA sendiri secara eksplisit menyatakan tidak mendistribusikan
+  ulang teks standar ASTM/ISO/AMPP berbayar — sejalan dengan aturan #12 di
+  `CLAUDE.md`.
+- **GAA** ([Disclaimer](https://gaa.com.au/disclaimer/)) — hanya berisi
+  pembatasan tanggung jawab (liability), tidak ada klausul reuse/copyright
+  eksplisit di halaman ini. Hak cipta default tetap berlaku meski tidak
+  dinyatakan ulang.
+- **Belum dilakukan:** mengirim email permohonan izin resmi ke AGA & GAA
+  (lihat `hdg-rag-ingest/references/legal.md` §1). Ini keputusan yang perlu
+  persetujuan pemilik proyek sebelum dikirim atas nama proyek/organisasi.
 
 ---
 
