@@ -1,0 +1,53 @@
+{
+  "standard": "ASTM A123/A123M",
+  "edition": "A123/A123M-24 (BELUM_DIVERIFIKASI)",
+  "verified_by": null,
+  "verified_at": null,
+  "unverified": true,
+  "grades": [35, 45, 50, 55, 60, 65, 75, 80, 85, 100],
+  "grade_table": {
+    "35":  { "mils": 1.4, "um": 35,  "oz_ft2": 0.8, "g_m2": 245 },
+    "45":  { "mils": 1.8, "um": 45,  "oz_ft2": 1.0, "g_m2": 320 },
+    "50":  { "mils": 2.0, "um": 50,  "oz_ft2": 1.2, "g_m2": 355 },
+    "55":  { "mils": 2.2, "um": 55,  "oz_ft2": 1.3, "g_m2": 390 },
+    "60":  { "mils": 2.4, "um": 60,  "oz_ft2": 1.4, "g_m2": 425 },
+    "65":  { "mils": 2.6, "um": 65,  "oz_ft2": 1.5, "g_m2": 460 },
+    "75":  { "mils": 3.0, "um": 75,  "oz_ft2": 1.7, "g_m2": 530 },
+    "80":  { "mils": 3.1, "um": 80,  "oz_ft2": 1.9, "g_m2": 565 },
+    "85":  { "mils": 3.3, "um": 85,  "oz_ft2": 2.0, "g_m2": 600 },
+    "100": { "mils": 3.9, "um": 100, "oz_ft2": 2.3, "g_m2": 705 }
+  },
+  "thickness_ranges": {
+    "metric_mm": [
+      { "id": "R1", "min": 0,    "min_incl": true,  "max": 1.6,  "max_incl": false },
+      { "id": "R2", "min": 1.6,  "min_incl": true,  "max": 3.2,  "max_incl": false },
+      { "id": "R3", "min": 3.2,  "min_incl": true,  "max": 4.8,  "max_incl": true  },
+      { "id": "R4", "min": 4.8,  "min_incl": false, "max": 6.4,  "max_incl": false },
+      { "id": "R5", "min": 6.4,  "min_incl": true,  "max": 16.0, "max_incl": false },
+      { "id": "R6", "min": 16.0, "min_incl": true,  "max": null,  "max_incl": false }
+    ],
+    "imperial_in": [
+      { "id": "R1", "min": 0,      "min_incl": true,  "max": 0.0625, "max_incl": false },
+      { "id": "R2", "min": 0.0625, "min_incl": true,  "max": 0.125,  "max_incl": false },
+      { "id": "R3", "min": 0.125,  "min_incl": true,  "max": 0.1875, "max_incl": true  },
+      { "id": "R4", "min": 0.1875, "min_incl": false, "max": 0.25,   "max_incl": false },
+      { "id": "R5", "min": 0.25,   "min_incl": true,  "max": 0.625,  "max_incl": false },
+      { "id": "R6", "min": 0.625,  "min_incl": true,  "max": null,   "max_incl": false }
+    ],
+    "_boundary_note": "Inklusivitas batas WAJIB diverifikasi terhadap teks A123/A123M-24 asli. Metric dan imperial diverifikasi terpisah, bukan dikonversi satu dari yang lain."
+  },
+  "table1": {
+    "STRUCTURAL_SHAPES": { "R1": 45,   "R2": 65,   "R3": 75,   "R4": 75,   "R5": 100, "R6": 100 },
+    "STRIP_BAR":         { "R1": 45,   "R2": 65,   "R3": 75,   "R4": 75,   "R5": 75,  "R6": 100 },
+    "PLATE":             { "R1": 45,   "R2": 65,   "R3": 75,   "R4": 75,   "R5": 75,  "R6": 100 },
+    "PIPE_TUBING":       { "R1": 45,   "R2": 45,   "R3": 75,   "R4": 75,   "R5": 75,  "R6": 75  },
+    "WIRE":              { "R1": 35,   "R2": 50,   "R3": 60,   "R4": 65,   "R5": 80,  "R6": 80  },
+    "REINFORCING_BAR":   { "R1": null, "R2": null, "R3": null, "R4": null, "R5": 100, "R6": 100 },
+    "FORGINGS_CASTINGS": { "R1": null, "R2": null, "R3": null, "R4": 100,  "R5": 100, "R6": 100 }
+  },
+  "out_of_scope": {
+    "centrifuged_hardware": "ASTM A153/A153M",
+    "reinforcing_bar_detail": "ASTM A767/A767M"
+  },
+  "source_url": "https://galvanizeit.org/knowledgebase/article/2024-revision-of-astm-a123"
+}
