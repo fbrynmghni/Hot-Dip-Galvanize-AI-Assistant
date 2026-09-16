@@ -50,7 +50,7 @@ sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 | 0.5 | Verifikasi resmi (`verified_by`/`verified_at`) | ⬜ Belum | Butuh sign-off engineer yang pegang salinan sah, **atau** proyek berjalan permanen dengan status `unverified` |
 | 0.6 | Ambiguitas batas 1,5 mm ISO 1461 | ⬜ Belum | 2 sumber terbuka berbeda arah; sudah di-flag sebagai unconfirmed test case |
 | 0.7 | Review Terms of Use AGA & Disclaimer GAA | 🟡 Sebagian | Sudah dibaca — lihat ringkasan di bawah. Email permohonan izin **belum dikirim** |
-| 0.8 | Scaffold aplikasi Next.js | ⬜ Belum | |
+| 0.8 | Scaffold aplikasi Next.js | ✅ Selesai | `apps/web` (Next.js 15 + TS + Tailwind), `packages/engineering-config`, `workers/ingest`, `eval` — lihat "Struktur repo" |
 
 > ⚠️ **Angka standar di repo ini belum diverifikasi.** Semua config ditandai
 > `"unverified": true` dan `verified_by: null`. Selama flag itu ada, output tool
@@ -114,17 +114,30 @@ sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 
 ```
 .
-├── CLAUDE.md                 # Aturan aktif + arsitektur (dibaca tiap sesi)
+├── CLAUDE.md                      # Aturan aktif + arsitektur (dibaca tiap sesi)
 ├── docs/
-│   └── blueprint-v1.md       # Blueprint naratif utuh (arsip)
-└── .claude/skills/           # Disiplin engineering sebagai skill
-    ├── hdg-standards-config/ # Tabel standar & prosedur verifikasi
-    ├── hdg-engineering-tool/ # Resep kalkulator deterministik
-    ├── hdg-rag-ingest/       # Crawl, chunking, retrieval, legal
-    ├── hdg-chat-guardrails/  # System prompt, tool calling, guardrail
-    ├── hdg-content-writer/   # Konten knowledge hub
-    └── hdg-answer-eval/      # Golden set & metrik kualitas
+│   └── blueprint-v1.md            # Blueprint naratif utuh (arsip)
+├── .claude/skills/                # Disiplin engineering sebagai skill
+│   ├── hdg-standards-config/      # Tabel standar & prosedur verifikasi
+│   ├── hdg-engineering-tool/      # Resep kalkulator deterministik
+│   ├── hdg-rag-ingest/            # Crawl, chunking, retrieval, legal
+│   ├── hdg-chat-guardrails/       # System prompt, tool calling, guardrail
+│   ├── hdg-content-writer/        # Konten knowledge hub
+│   └── hdg-answer-eval/           # Golden set & metrik kualitas
+├── apps/web/                      # Next.js 15 + TypeScript + Tailwind
+│   ├── app/(hub)/learn/[slug]/    # halaman artikel
+│   ├── app/chat/                  # UI chat
+│   ├── app/tools/                 # kalkulator
+│   ├── app/api/chat/route.ts
+│   ├── app/api/tools/[name]/route.ts
+│   └── tests/                     # vitest (belum ada test — lihat hdg-engineering-tool)
+├── packages/engineering-config/   # tabel standar (JSON, versioned) — sumber angka
+├── workers/ingest/                # crawler & embedder (belum diimplementasikan)
+└── eval/                          # golden Q&A + skrip metrik (belum diimplementasikan)
 ```
+
+Jalankan `npm install` di root, lalu `npm run dev` untuk apps/web (npm
+workspaces, bukan pnpm/yarn).
 
 Setelah scaffolding, akan bertambah:
 
