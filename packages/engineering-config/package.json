@@ -1,0 +1,9 @@
+{
+  "name": "@galva-ai/engineering-config",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tabel standar HDG (JSON, versioned). Angka dibaca dari sini, tidak pernah di-hardcode di kode tool. Lihat .claude/skills/hdg-standards-config/.",
+  "files": [
+    "*.json"
+  ]
+}
