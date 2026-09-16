@@ -11,5 +11,8 @@
     { "min": 1.5, "min_incl": false, "max": 3.0,  "max_incl": true,  "local_um": 45, "mean_um": 55 },
     { "min": 0.0, "min_incl": true,  "max": 1.5,  "max_incl": true,  "local_um": 35, "mean_um": 45 }
   ],
-  "_boundary_note": "Batas 1,5 mm BERBEDA dari ISO 1461 (di sini <= 1,5 masuk kelas 35/45). Jangan digabung ke satu file."
+  "_boundary_note": "Batas 1,5 mm BERBEDA dari ISO 1461 (di sini <= 1,5 masuk kelas 35/45). Jangan digabung ke satu file.",
+  "_sources": [
+    "https://gaa.com.au/coating-thickness-and-factors-influencing-thickness/ (kolom average dikonfirmasi persis 45/55/70/85 dan arah batas 1,5mm; kolom local belum dikonfirmasi terpisah di sumber ini)"
+  ]
 }
