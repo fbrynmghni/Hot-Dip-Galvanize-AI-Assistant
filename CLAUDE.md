@@ -108,8 +108,8 @@ mahasiswa/pengajar (konsep metalurgi).
        │                  │                   │
 ┌──────▼──────┐   ┌───────▼────────┐   ┌──────▼───────────────┐
 │  LLM API    │   │ Vector Store   │   │  Engineering Config  │
-│  Claude     │   │ Postgres +     │   │  (tabel standar,     │
-│  (Anthropic)│   │ pgvector       │   │   versi terverifikasi)│
+│  OpenAI     │   │ Postgres +     │   │  (tabel standar,     │
+│  (GPT)      │   │ pgvector       │   │   versi terverifikasi)│
 └─────────────┘   └───────▲────────┘   └──────────────────────┘
                           │
                 ┌─────────┴──────────┐
@@ -126,8 +126,8 @@ mahasiswa/pengajar (konsep metalurgi).
 |---|---|---|
 | Framework | **Next.js 15 + TypeScript** | SSR untuk SEO konten, API di satu repo |
 | UI | Tailwind CSS + shadcn/ui | Cepat, konsisten |
-| LLM | **Claude API** (`claude-sonnet-5`) | Kuat di reasoning teknis & tool use |
-| Embedding | Voyage AI / model embedding multilingual | Query Indonesia ↔ dokumen Inggris |
+| LLM | **OpenAI API** (`gpt-5.5`, pin ke snapshot untuk produksi) | Reasoning model, tool calling; lihat `.env.example` untuk catatan API |
+| Embedding | **OpenAI** `text-embedding-3-large` | Query Indonesia ↔ dokumen Inggris |
 | Vector DB | **Supabase Postgres + pgvector** | Satu DB untuk data relasional & vektor |
 | Re-ranking | Cohere Rerank / Voyage rerank | Presisi retrieval untuk istilah teknis |
 | Ingestion | Python (httpx, trafilatura, pdfplumber) | Ekosistem parsing matang |
