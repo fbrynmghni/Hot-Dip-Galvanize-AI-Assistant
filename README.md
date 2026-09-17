@@ -63,7 +63,7 @@ sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 |---|---|---|
 | 1.1 | Ingestion AGA + GAA (crawl → clean → chunk → embed) | ⬜ Belum |
 | 1.2 | Chat RAG + tool calling + sitasi | ⬜ Belum |
-| 1.3 | 3 kalkulator (thickness, durability, reactivity) | ⬜ Belum |
+| 1.3 | 3 kalkulator (thickness, durability, reactivity) | ✅ Logic + API selesai | `apps/web/lib/tools/`, `/api/tools/[name]`; 52 test lulus. UI form kalkulator (`/tools` masih halaman info) belum dibangun |
 | 1.4 | 10 halaman knowledge hub | ⬜ Belum |
 
 ### Fase 2 — Kualitas
