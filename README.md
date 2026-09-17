@@ -61,7 +61,7 @@ sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 
 | # | Item | Status |
 |---|---|---|
-| 1.1 | Ingestion AGA + GAA (crawl → clean → chunk → embed) | ⬜ Belum |
+| 1.1 | Ingestion AGA (crawl → clean → chunk → embed) | 🟡 Pipeline selesai, belum dijalankan sungguhan | `workers/ingest/`, 36 test lulus. GAA ditunda (robots.txt anti-scraping). Storage masih JSON lokal, belum Postgres/pgvector. Butuh `CRAWLER_CONTACT_EMAIL` sebelum crawl nyata |
 | 1.2 | Chat RAG + tool calling + sitasi | ⬜ Belum |
 | 1.3 | 3 kalkulator (thickness, durability, reactivity) | ✅ Logic + API selesai | `apps/web/lib/tools/`, `/api/tools/[name]`; 52 test lulus. UI form kalkulator (`/tools` masih halaman info) belum dibangun |
 | 1.4 | 10 halaman knowledge hub | ⬜ Belum |
