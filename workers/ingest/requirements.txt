@@ -1,5 +1,0 @@
-httpx
-trafilatura
-pdfplumber
-pydantic
-openai
