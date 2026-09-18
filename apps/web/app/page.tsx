@@ -12,8 +12,8 @@ export default function Home() {
       <h1 className="text-2xl font-semibold mb-2">GalvaAI</h1>
       <p className="text-sm text-gray-500 mb-10">
         Knowledge hub + AI assistant untuk hot dip galvanizing (batch /
-        after-fabrication). Fase 0 — aplikasi baru di-scaffold, belum ada
-        fitur yang jalan.
+        after-fabrication). Chat dan kalkulator sudah bisa dicoba — knowledge
+        hub masih dalam pengerjaan.
       </p>
       <nav className="flex flex-col gap-4">
         {links.map(({ href, label, desc }) => (
