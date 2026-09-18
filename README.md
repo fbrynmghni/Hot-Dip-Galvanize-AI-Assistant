@@ -62,7 +62,7 @@ sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 | # | Item | Status |
 |---|---|---|
 | 1.1 | Ingestion AGA (crawl → clean → chunk → embed) | 🟡 Pipeline selesai, belum dijalankan sungguhan | `workers/ingest/`, 36 test lulus. GAA ditunda (robots.txt anti-scraping). Storage masih JSON lokal, belum Postgres/pgvector. Butuh `CRAWLER_CONTACT_EMAIL` sebelum crawl nyata |
-| 1.2 | Chat RAG + tool calling + sitasi | ⬜ Belum |
+| 1.2 | Chat RAG + tool calling + sitasi | ✅ Orchestrator selesai, diverifikasi live ke gpt-5.5 | `/api/chat`, `lib/llm/`, `lib/rag/`; 80 test JS + 37 test Python lulus. Retrieval lokal (BM25+cosine) atas `.cache/` yang masih kosong (belum crawl) — jawaban jujur "no_context" sampai ada data. UI chat & streaming belum dibangun |
 | 1.3 | 3 kalkulator (thickness, durability, reactivity) | ✅ Logic + API selesai | `apps/web/lib/tools/`, `/api/tools/[name]`; 52 test lulus. UI form kalkulator (`/tools` masih halaman info) belum dibangun |
 | 1.4 | 10 halaman knowledge hub | ⬜ Belum |
 
