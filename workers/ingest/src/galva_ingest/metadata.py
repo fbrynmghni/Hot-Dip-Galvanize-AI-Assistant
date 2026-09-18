@@ -77,9 +77,14 @@ def infer_standard_family(source: Source, text: str) -> StandardFamily:
     (mis. tabel pembanding ASTM vs ISO) ditandai "general" -- jangan sampai
     dipakai sebagai sumber angka untuk satu standar saja.
     """
+    # Daftar token ISO harus sinkron dengan EXACT_TOKENS di
+    # apps/web/lib/rag/query-expansion.ts -- keduanya menganggap nomor
+    # standar ini sebagai token persis milik keluarga ISO/AS-NZS.
+    ISO_MARKERS = ("AS/NZS", "ISO 1461", "ISO 9223", "ISO 2178", "ISO 1460", "ISO 10684")
+
     t = text.upper()
     mentions_astm = "ASTM" in t
-    mentions_iso = "AS/NZS" in t or "ISO 1461" in t or "ISO 9223" in t
+    mentions_iso = any(marker in t for marker in ISO_MARKERS)
     if mentions_astm and mentions_iso:
         return "general"
     if mentions_astm:

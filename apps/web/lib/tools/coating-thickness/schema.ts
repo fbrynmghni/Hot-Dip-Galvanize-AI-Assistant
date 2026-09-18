@@ -37,6 +37,12 @@ export const ThicknessInput = z.discriminatedUnion("standard", [
   z.object({
     standard: z.literal("ASNZS4680"),
     steelThicknessMm: z.number().positive().max(300),
+    // Field ini ADA di schema (bukan dihilangkan) justru supaya isCasting:true
+    // untuk AS/NZS 4680 tidak di-strip diam-diam oleh Zod dan diam-diam
+    // dijawab pakai tabel non-casting -- lihat iso-family.ts, yang menolak
+    // eksplisit dengan NOT_DEFINED karena tabel casting AS/NZS 4680 belum
+    // ada di config.
+    isCasting: z.boolean().default(false),
     readingsUm: Readings.optional(),
   }),
 ]);

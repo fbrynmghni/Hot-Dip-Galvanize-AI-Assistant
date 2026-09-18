@@ -11,6 +11,21 @@ export function checkIsoFamily(input: {
 }) {
   type ThicknessRow = Range & { local_um: number; mean_um: number };
   const cfg = input.standard === "ISO1461" ? iso1461 : asnzs4680;
+
+  if (input.isCasting && !("castings" in cfg)) {
+    // AS/NZS 4680 belum punya tabel casting di config -- menjawab pakai
+    // tabel non-casting di sini akan diam-diam memberi angka yang salah
+    // untuk artikel casting. Tolak eksplisit (aturan #7: sel kosong bukan
+    // izin menebak), bukan default ke tabel yang salah.
+    return {
+      standard: `${cfg.standard} (${cfg.edition})`,
+      verdict: "NOT_DEFINED",
+      note:
+        "Tabel casting untuk AS/NZS 4680 belum didukung di config v1. " +
+        "Konsultasikan ke galvanizer/inspector untuk persyaratan artikel casting.",
+    };
+  }
+
   const table = (
     input.isCasting && "castings" in cfg ? cfg.castings : cfg.rows
   ) as ThicknessRow[];

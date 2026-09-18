@@ -1,0 +1,15 @@
+{
+  "standard": "Sandelin effect screening (rule of thumb industri, bukan satu standar tunggal)",
+  "edition": "ISI_EDISI_YANG_DIVERIFIKASI",
+  "verified_by": null,
+  "verified_at": null,
+  "unverified": true,
+  "phosphorus_coefficient": 2.5,
+  "zones": [
+    { "max_si_eq": 0.04, "max_incl": false, "zone": "LOW", "expectation": "Coating relatif tipis & mengkilap" },
+    { "max_si_eq": 0.15, "max_incl": true, "zone": "SANDELIN", "expectation": "Sangat reaktif: tebal, kusam, risiko getas" },
+    { "max_si_eq": 0.22, "max_incl": true, "zone": "MODERATE", "expectation": "Reaktivitas terkendali" },
+    { "max_si_eq": null, "max_incl": false, "zone": "HIGH", "expectation": "Tebal, abu-abu matte" }
+  ],
+  "_note": "Koefisien fosfor 2.5 dan batas zona 0.04/0.15/0.22 dipindahkan dari kode ke sini (sebelumnya hardcoded di lib/tools/steel-reactivity.ts) mengikuti CLAUDE.md aturan #2. Angka-angka ini adalah rule-of-thumb yang umum dikutip literatur galvanis untuk kurva Sandelin, TAPI belum diverifikasi ke satu artikel AGA/GAA spesifik dengan sitasi URL -- masih perlu langkah verifikasi (skill hdg-standards-config) sebelum status unverified bisa dianggap tuntas."
+}

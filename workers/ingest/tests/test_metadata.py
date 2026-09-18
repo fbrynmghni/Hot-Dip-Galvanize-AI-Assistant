@@ -21,6 +21,17 @@ def test_infer_iso_1461_variant_without_asnzs_token():
     assert infer_standard_family("GAA", "ISO 1461 sets a mean minimum of 85 um.") == "ISO/ASNZS"
 
 
+def test_infer_recognizes_iso_2178_1460_10684_as_iso_family():
+    # Regression: these were canonical exact tokens in
+    # apps/web/lib/rag/query-expansion.ts's EXACT_TOKENS but missing from
+    # this function's marker list, so an AGA chunk about e.g. ISO 2178
+    # (thickness gauging) with no "ASTM" mention fell through to the
+    # source-based "ASTM" default -- mislabeling ISO content.
+    assert infer_standard_family("AGA", "Measured per ISO 2178 using magnetic gauges.") == "ISO/ASNZS"
+    assert infer_standard_family("AGA", "ISO 1460 covers gravimetric testing.") == "ISO/ASNZS"
+    assert infer_standard_family("AGA", "Fasteners per ISO 10684 need care.") == "ISO/ASNZS"
+
+
 def test_mentions_both_standards_is_general_not_first_match():
     # Regression: naive if/elif (ASTM checked first) would misclassify a
     # comparison table as "ASTM" even though it also cites ISO/AS-NZS --

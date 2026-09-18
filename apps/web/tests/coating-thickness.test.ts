@@ -172,6 +172,16 @@ describe("AS/NZS 4680", () => {
   it("plat 10 mm → 70/85", () => {
     expect(as(10).requirement).toEqual({ localMinUm: 70, meanMinUm: 85 });
   });
+
+  it("isCasting:true → NOT_DEFINED, BUKAN diam-diam pakai tabel non-casting", () => {
+    // Regression: AS/NZS 4680 tidak punya tabel casting di config v1. Tanpa
+    // guard ini, isCasting:true silently di-strip dan angka non-casting
+    // (bisa berbeda dari kenyataan) dikembalikan seolah benar.
+    const r = asTestResult(
+      checkCoatingThickness({ standard: "ASNZS4680", steelThicknessMm: 8, isCasting: true }),
+    );
+    expect(r.verdict).toBe("NOT_DEFINED");
+  });
 });
 
 describe("Validasi input", () => {
