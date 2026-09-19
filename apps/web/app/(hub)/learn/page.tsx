@@ -1,12 +1,20 @@
 export default function LearnIndexPage() {
   return (
-    <main className="min-h-screen p-8 sm:p-20 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-2">Knowledge hub</h1>
-      <p className="text-sm text-gray-500">
+    <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-10 sm:px-10">
+      <p className="stamp-label mb-2">HUB · REFERENCE</p>
+      <h1
+        className="mb-2 text-2xl font-semibold uppercase tracking-wide text-steel-100"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
+        Knowledge hub
+      </h1>
+      <div className="panel-riveted mt-6 border-l-4 border-l-steel-400 p-5 text-sm text-steel-300">
         Belum ada artikel. Struktur halaman ada di{" "}
-        <code>hdg-content-writer/references/site-map.md</code> — penulisan
-        konten direncanakan Fase 1.
-      </p>
+        <code className="font-mono text-steel-100">
+          hdg-content-writer/references/site-map.md
+        </code>{" "}
+        — penulisan konten direncanakan Fase 1.
+      </div>
     </main>
   );
 }

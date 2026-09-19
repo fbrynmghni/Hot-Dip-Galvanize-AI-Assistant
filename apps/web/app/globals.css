@@ -1,26 +1,170 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Steel — the base structure. Cool, near-black charcoal like oxidized plate. */
+  --steel-950: #0b0e11;
+  --steel-900: #12171b;
+  --steel-850: #171d22;
+  --steel-800: #1e262c;
+  --steel-700: #2a343b;
+  --steel-600: #3c4850;
+  --steel-400: #71828b;
+  --steel-300: #9aa9b1;
+  --steel-100: #e9edef;
+
+  /* Zinc blue — cold rolled steel before the dip. */
+  --zinc-blue: #3d7cb0;
+  --zinc-blue-bright: #64abe0;
+
+  /* Kettle red — molten zinc at ~450°C. */
+  --kettle-red: #d3481f;
+  --kettle-red-bright: #ff7440;
+
+  /* Used sparingly: venting / safety callouts only. */
+  --hazard-yellow: #eab308;
+
+  --background: var(--steel-950);
+  --foreground: var(--steel-100);
+  --muted: var(--steel-300);
+  --panel: var(--steel-900);
+  --panel-raised: var(--steel-850);
+  --panel-border: var(--steel-700);
+
+  --temper-gradient: linear-gradient(
+    90deg,
+    var(--zinc-blue) 0%,
+    var(--zinc-blue-bright) 24%,
+    var(--steel-600) 50%,
+    var(--kettle-red) 76%,
+    var(--kettle-red-bright) 100%
+  );
+  --temper-gradient-radial: radial-gradient(
+      60% 50% at 12% 100%,
+      color-mix(in srgb, var(--kettle-red) 30%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      55% 45% at 92% 0%,
+      color-mix(in srgb, var(--zinc-blue) 28%, transparent) 0%,
+      transparent 70%
+    );
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-panel: var(--panel);
+  --color-panel-raised: var(--panel-raised);
+  --color-panel-border: var(--panel-border);
+  --color-steel-950: var(--steel-950);
+  --color-steel-900: var(--steel-900);
+  --color-steel-850: var(--steel-850);
+  --color-steel-800: var(--steel-800);
+  --color-steel-700: var(--steel-700);
+  --color-steel-600: var(--steel-600);
+  --color-steel-400: var(--steel-400);
+  --color-steel-300: var(--steel-300);
+  --color-steel-100: var(--steel-100);
+  --color-zinc-blue: var(--zinc-blue);
+  --color-zinc-blue-bright: var(--zinc-blue-bright);
+  --color-kettle-red: var(--kettle-red);
+  --color-kettle-red-bright: var(--kettle-red-bright);
+  --color-hazard-yellow: var(--hazard-yellow);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-data);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--panel-border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), Arial, Helvetica, sans-serif;
+}
+
+/* Fine blueprint grid — the drafting-table backdrop behind everything. */
+.blueprint-grid {
+  background-image:
+    linear-gradient(var(--steel-850) 1px, transparent 1px),
+    linear-gradient(90deg, var(--steel-850) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: -1px -1px;
+}
+
+/* The signature: a thin bar tracing the thermal spectrum of the dip,
+   cold zinc-blue steel to red-hot kettle. Used as the one recurring
+   accent — header underline, section rules, focus states. */
+.temper-bar {
+  height: 3px;
+  background-image: var(--temper-gradient);
+  background-size: 200% 100%;
+}
+
+.temper-text {
+  background-image: var(--temper-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Riveted steel plate panel: four corner rivets via layered radial gradients. */
+.panel {
+  position: relative;
+  background-color: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 0.375rem;
+}
+
+.panel-riveted {
+  background-color: var(--panel);
+  background-image:
+    radial-gradient(circle 2.5px at 12px 12px, var(--steel-600) 45%, transparent 46%),
+    radial-gradient(circle 2.5px at calc(100% - 12px) 12px, var(--steel-600) 45%, transparent 46%),
+    radial-gradient(circle 2.5px at 12px calc(100% - 12px), var(--steel-600) 45%, transparent 46%),
+    radial-gradient(
+      circle 2.5px at calc(100% - 12px) calc(100% - 12px),
+      var(--steel-600) 45%,
+      transparent 46%
+    );
+  background-repeat: no-repeat;
+  border: 1px solid var(--panel-border);
+  border-radius: 0.375rem;
+}
+
+.stamp-label {
+  font-family: var(--font-data), monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.btn-forge {
+  background-image: linear-gradient(90deg, var(--zinc-blue) 0%, var(--kettle-red) 100%);
+  color: var(--steel-100);
+  transition: filter 150ms ease, transform 150ms ease;
+}
+
+.btn-forge:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.btn-forge:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+:focus-visible {
+  outline: 2px solid var(--zinc-blue-bright);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

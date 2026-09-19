@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Oswald, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { SiteHeader } from "./components/site-header";
+import { SiteFooter } from "./components/site-footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const oswald = Oswald({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
+const inter = Inter({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-data",
   subsets: ["latin"],
 });
 
@@ -26,9 +34,11 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${oswald.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased flex min-h-screen flex-col`}
       >
-        {children}
+        <SiteHeader />
+        <div className="flex-1 flex flex-col">{children}</div>
+        <SiteFooter />
       </body>
     </html>
   );

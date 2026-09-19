@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatErrorDetail } from "@/lib/format-error-detail";
 
 type Role = "user" | "assistant";
 type SelectedStandard = "ASTM_A123" | "ISO1461" | "ASNZS4680" | "";
@@ -47,7 +48,9 @@ export default function ChatPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
+          messages: nextMessages
+            .filter((m) => !m.error)
+            .map((m) => ({ role: m.role, content: m.content })),
           selectedStandard: selectedStandard || null,
         }),
       });
@@ -56,7 +59,14 @@ export default function ChatPage() {
       if (!res.ok) {
         setMessages((prev) => [
           ...prev,
-          { role: "assistant", content: "", error: data.detail || data.error || "Terjadi kesalahan." },
+          {
+            role: "assistant",
+            content: "",
+            error:
+              formatErrorDetail(data.detail) ??
+              (typeof data.error === "string" ? data.error : undefined) ??
+              "Terjadi kesalahan.",
+          },
         ]);
         return;
       }
@@ -81,15 +91,21 @@ export default function ChatPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col p-8 sm:p-20 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-2">Chat</h1>
-      <p className="text-sm text-gray-500 mb-4">
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-6 py-10 sm:px-10">
+      <p className="stamp-label mb-2">RAG · CHAT</p>
+      <h1
+        className="mb-2 text-2xl font-semibold uppercase tracking-wide text-steel-100"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
+        Chat
+      </h1>
+      <p className="mb-6 text-sm text-steel-300">
         Tanya jawab hot dip galvanizing. Angka selalu dihitung tool, bukan ditebak model.
       </p>
 
-      <label className="text-xs text-gray-500 mb-1">Standar (opsional)</label>
+      <label className="stamp-label mb-1.5">Standar (opsional)</label>
       <select
-        className="mb-4 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm"
+        className="mb-6 w-fit rounded-md border border-panel-border bg-panel px-3 py-2 text-sm text-steel-100"
         value={selectedStandard}
         onChange={(e) => setSelectedStandard(e.target.value as SelectedStandard)}
       >
@@ -99,44 +115,47 @@ export default function ChatPage() {
         <option value="ASNZS4680">AS/NZS 4680</option>
       </select>
 
-      <div className="flex-1 flex flex-col gap-4 mb-4 overflow-y-auto">
+      <div className="mb-4 flex flex-1 flex-col gap-4 overflow-y-auto">
         {messages.length === 0 && (
-          <p className="text-sm text-gray-500 italic">
+          <p className="panel-riveted p-4 text-sm italic text-steel-300">
             Contoh: &quot;Plate 10mm menurut ASTM A123 gradenya berapa?&quot;
           </p>
         )}
         {messages.map((m, i) => (
           <div
             key={i}
-            className={`rounded-lg border px-4 py-3 text-sm whitespace-pre-wrap ${
+            className={`max-w-[85%] whitespace-pre-wrap rounded-md border px-4 py-3 text-sm ${
               m.role === "user"
-                ? "border-black/10 dark:border-white/15 self-end bg-black/[.03] dark:bg-white/[.05]"
-                : "border-black/10 dark:border-white/15"
+                ? "self-end border-l-4 border-l-zinc-blue-bright border-y-panel-border border-r-panel-border bg-panel-raised text-steel-100"
+                : "self-start border-l-4 border-l-kettle-red-bright border-y-panel-border border-r-panel-border bg-panel text-steel-100"
             }`}
           >
             {m.error ? (
-              <span className="text-red-500">{m.error}</span>
+              <span className="text-kettle-red-bright">{m.error}</span>
             ) : (
               <>
                 {m.content}
                 {m.confidence && m.confidence !== "ok" && (
-                  <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+                  <div className="mt-2 text-xs text-hazard-yellow">
                     {m.confidence === "no_context"
                       ? "⚠ Informasi terbatas — knowledge base tidak menemukan dokumen relevan."
                       : "⚠ Informasi terbatas — hasil retrieval kurang meyakinkan."}
                   </div>
                 )}
                 {m.citations && m.citations.length > 0 && (
-                  <div className="mt-3 flex flex-col gap-1.5 border-t border-black/10 dark:border-white/15 pt-2">
+                  <div className="mt-3 flex flex-col gap-1.5 border-t border-panel-border pt-2">
                     {m.citations.map((c, j) => (
                       <a
                         key={j}
                         href={c.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+                        className="text-xs text-zinc-blue-bright hover:underline"
                       >
                         [{c.source}] {c.title}
+                        {c.standard_family !== "general" && (
+                          <span className="text-steel-400"> · {c.standard_family}</span>
+                        )}
                       </a>
                     ))}
                   </div>
@@ -145,12 +164,12 @@ export default function ChatPage() {
             )}
           </div>
         ))}
-        {loading && <p className="text-sm text-gray-500">Memproses…</p>}
+        {loading && <p className="text-sm text-steel-300">Memproses…</p>}
       </div>
 
       <div className="flex gap-2">
         <input
-          className="flex-1 rounded-md border border-black/10 dark:border-white/15 bg-transparent px-3 py-2 text-sm"
+          className="flex-1 rounded-md border border-panel-border bg-panel px-3 py-2 text-sm text-steel-100 placeholder:text-steel-400"
           value={input}
           placeholder="Tulis pertanyaan…"
           onChange={(e) => setInput(e.target.value)}
@@ -165,13 +184,13 @@ export default function ChatPage() {
         <button
           onClick={send}
           disabled={loading || !input.trim()}
-          className="rounded-md bg-foreground text-background px-4 py-2 text-sm font-medium disabled:opacity-40"
+          className="btn-forge rounded-md px-4 py-2 text-sm font-medium disabled:opacity-40"
         >
           Kirim
         </button>
       </div>
       {selectedStandard && (
-        <p className="mt-2 text-xs text-gray-500">
+        <p className="stamp-label mt-2">
           Standar terpilih: {STANDARD_LABELS[selectedStandard]}
         </p>
       )}
