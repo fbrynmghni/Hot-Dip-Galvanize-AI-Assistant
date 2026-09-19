@@ -32,9 +32,12 @@ tidak, cukup ditautkan — jangan diunduh, di-parse, dan disimpan sebagai chunk.
 
 ## 5. Teks standar
 
-Teks ASTM/ISO/AS-NZS **tidak dimuat utuh**. Yang disimpan hanya nilai numerik
-yang diperlukan tool, berasal dari salinan standar yang dibeli secara sah, plus
-rujukan nomor tabel/klausul. Lihat skill `hdg-standards-config`.
+Teks ASTM/ISO/AS-NZS **tidak dimuat utuh**. Proyek ini portofolio & edukasi —
+tidak membeli atau memakai teks standar berbayar sama sekali. Yang disimpan
+hanya nilai numerik yang diperlukan tool, **berasal dari artikel terbuka di
+website** (AGA, GAA, asosiasi galvanizing nasional sejenis), plus rujukan URL
+dan nomor tabel/klausul. Konsekuensinya config selamanya `unverified: true` —
+lihat skill `hdg-standards-config`.
 
 ## 6. Kalkulator milik asosiasi
 

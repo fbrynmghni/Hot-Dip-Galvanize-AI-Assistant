@@ -1,49 +1,66 @@
 # Orchestrator `/api/chat`
 
+Proyek ini memakai **OpenAI** (`gpt-5.5`), bukan Claude — lihat CLAUDE.md tech
+stack dan `.env.example`. Bentuk API tool-calling-nya berbeda dari Anthropic:
+OpenAI memakai `tool_calls` pada `message`, bukan content block `tool_use`,
+dan hasil tool dikirim balik sebagai pesan `role: "tool"` dengan `tool_call_id`
+— bukan `tool_result` di dalam pesan `user`.
+
+`gpt-5.5` adalah **reasoning model**: pakai `max_completion_tokens`, BUKAN
+`max_tokens`; reasoning token ikut ditagih dari kuota itu. Budget terlalu
+kecil membuat `finish_reason: "length"` dengan `content` kosong (reasoning
+menghabiskan jatah sebelum sempat menjawab) — cek kondisi ini secara eksplisit,
+jangan biarkan lolos sebagai jawaban kosong.
+
 ```ts
 // app/api/chat/route.ts
 export async function POST(req: Request) {
-  const { messages, selectedStandard } = await req.json();
+  const { messages, selectedStandard } = ChatRequest.parse(await req.json());
   // selectedStandard: "ASTM_A123" | "ISO1461" | "ASNZS4680" | null (dari selector UI)
-  await rateLimit(req);
+  // Rate limit (Upstash) belum ada -- lihat catatan di bawah.
 
-  const SYSTEM_PROMPT =
-    `${BASE_PROMPT}\n<selected_standard>${selectedStandard ?? "BELUM_DIPILIH"}</selected_standard>`;
+  const systemPrompt = buildSystemPrompt(selectedStandard);
+  const convo: ChatCompletionMessageParam[] = [...messages];
+  // ...sisipkan <context> hasil retrieval ke pesan user terakhir (lihat di bawah)
 
-  let convo = [...messages];
+  const allMessages: ChatCompletionMessageParam[] = [
+    { role: "system", content: systemPrompt },
+    ...convo,
+  ];
 
-  for (let step = 0; step < 5; step++) {          // batasi loop tool
-    const res = await anthropic.messages.create({
-      model: "claude-sonnet-5",
-      system: SYSTEM_PROMPT,
+  for (let step = 0; step < 5; step++) {              // batasi loop tool
+    const res = await client.chat.completions.create({
+      model: "gpt-5.5",
+      messages: allMessages,
       tools,
-      max_tokens: 1500,
-      messages: convo,
+      max_completion_tokens: 2000,
     });
 
-    if (res.stop_reason !== "tool_use") return streamToClient(res);
+    const message = res.choices[0].message;
+    if (!message.tool_calls?.length) {
+      if (res.choices[0].finish_reason === "length" && !message.content) {
+        return truncatedError();                       // reasoning menghabiskan kuota
+      }
+      return NextResponse.json({ message: message.content, citations, confidence });
+    }
 
+    allMessages.push(message);
     const toolResults = await Promise.all(
-      res.content.filter(b => b.type === "tool_use").map(async b => ({
-        type: "tool_result",
-        tool_use_id: b.id,
-        content: JSON.stringify(await runTool(b.name, b.input)),  // validasi Zod di dalam
+      message.tool_calls.map(async (call) => ({
+        role: "tool" as const,
+        tool_call_id: call.id,
+        content: JSON.stringify(await runTool(call.function.name, JSON.parse(call.function.arguments))),
       }))
     );
-
-    convo.push(
-      { role: "assistant", content: res.content },
-      { role: "user", content: toolResults },
-    );
+    allMessages.push(...toolResults);
   }
-
-  return fallbackAnswer();
+  return fallbackAnswer();                             // loop 5x tanpa resolusi
 }
 ```
 
 ## Penanganan error tool
 
-Error Zod dikembalikan **apa adanya** ke model sebagai `tool_result`, bukan
+Error Zod dikembalikan **apa adanya** ke model sebagai isi pesan `tool`, bukan
 ditelan jadi pesan generik:
 
 ```ts
@@ -59,38 +76,58 @@ async function runTool(name: string, input: unknown) {
 Pesan Zod menyebut field mana yang hilang, dan itulah yang membuat model
 bertanya balik ke user ("kategori materialnya apa?") alih-alih menebak.
 
+Setiap fungsi di `TOOL_IMPL` menerima `raw: unknown` dan memvalidasi sendiri
+lewat Zod di dalam — lihat `hdg-engineering-tool/references/existing-tools.md`
+bagian "Kenapa `raw: unknown` di semua tool". `runTool` di atas cuma
+dispatcher tipis; jangan taruh validasi di sini.
+
 ## Menyisipkan konteks retrieval
 
-Hasil retrieval masuk sebagai bagian dari pesan user, dibungkus `<context>`,
-**tidak pernah** digabung ke system prompt:
+Ada **dua jalur** retrieval yang saling melengkapi, bukan salah satu:
 
-```ts
-const contextBlock =
-  `<context>\n${chunks.map(c => `[${c.source}] ${c.title} — ${c.url}\n${c.text}`).join("\n\n")}\n</context>`;
-```
+1. **Eager, sebelum turn pertama model.** Query user terakhir langsung
+   dipakai memanggil `retrieve()` (skill `hdg-rag-ingest`), hasilnya
+   disisipkan ke **pesan user** (bukan system prompt), dibungkus `<context>`:
 
-Teks di dalam `<context>` berasal dari halaman web dan bisa memuat kalimat yang
-menyerupai instruksi. System prompt sudah menyatakan bahwa isinya adalah data.
+   ```ts
+   const contextBlock =
+     `<context>\n${chunks.map(c => `[${c.source}] ${c.title} — ${c.url}\n${c.text}`).join("\n\n")}\n</context>`;
+   ```
+
+2. **Agentic, lewat tool `search_knowledge`.** Kalau konteks awal tidak cukup
+   (mis. user bertanya lebih spesifik di follow-up), model bisa memanggil
+   tool ini untuk mencari ulang dengan query yang lebih tajam. Ini
+   men-*dispatch* ke fungsi `retrieve()` yang sama, bukan implementasi kedua.
+
+Teks di dalam `<context>` berasal dari halaman web dan bisa memuat kalimat
+yang menyerupai instruksi. System prompt sudah menyatakan bahwa isinya adalah
+data, dan `<context>` **tidak pernah** digabung ke system prompt di jalur mana pun.
+
+## Confidence & sitasi
+
+`retrieve()` mengembalikan `confidence: "ok" | "low" | "no_context"`.
+Kumpulkan semua chunk yang benar-benar dipakai (dari eager retrieval maupun
+`search_knowledge`) sebagai `citations` di response API — dipakai UI untuk
+kartu sitasi, dan dipakai model untuk tahu kapan harus bilang "konteks tidak
+cukup" alih-alih mengarang.
 
 ## Streaming & UI
 
-- Jawaban di-stream; kartu sitasi (judul, sumber, link) dirender dari metadata
-  chunk yang dipakai.
+- **Belum di-stream di v1** — response JSON penuh, bukan SSE. Cukup untuk
+  membuktikan orchestrator benar sebelum menambah kompleksitas streaming.
 - Angka hasil tool diberi badge "dihitung oleh tool", dibedakan dari narasi.
-- Tombol feedback 👍/👎 + alasan → `/api/feedback` → tabel `chat_logs`.
+- Tombol feedback 👍/👎 + alasan → `/api/feedback` (belum diimplementasikan).
 
 ## Rate limit & auth
 
-Rate limit (mis. Upstash) dijalankan **sebelum** pemanggilan model. Auth
-opsional (Supabase Auth) untuk kuota per user.
+**Belum ada** — Upstash rate limit dan Supabase Auth direncanakan Fase 2.
+Jangan expose route ini publik tanpa rate limit terpasang lebih dulu.
 
 ## Endpoint terkait
 
-| Endpoint | Method | Fungsi |
-|---|---|---|
-| `/api/chat` | POST | Chat dengan RAG + tools (streaming) |
-| `/api/tools/thickness` | POST | Coating thickness checker |
-| `/api/tools/durability` | POST | Durability estimator |
-| `/api/tools/reactivity` | POST | Steel reactivity screener |
-| `/api/feedback` | POST | Simpan feedback |
-| `/api/admin/reindex` | POST | Trigger re-ingestion (protected) |
+| Endpoint | Method | Fungsi | Status |
+|---|---|---|---|
+| `/api/chat` | POST | Chat dengan RAG + tools (non-streaming) | Diimplementasikan |
+| `/api/tools/[name]` | POST | Dispatcher kalkulator (thickness/compare/durability/reactivity) | Diimplementasikan |
+| `/api/feedback` | POST | Simpan feedback | Belum |
+| `/api/admin/reindex` | POST | Trigger re-ingestion (protected) | Belum |

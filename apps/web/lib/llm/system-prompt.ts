@@ -1,15 +1,11 @@
-# System Prompt GalvaAI — Baseline
+/**
+ * Baseline di .claude/skills/hdg-chat-guardrails/references/system-prompt.md.
+ * Ubah dengan diff terhadap file itu, jangan tulis ulang dari nol -- setiap
+ * baris di sini ada karena satu kasus kegagalan nyata. Perubahan wajib
+ * disertai kasus baru di golden set (skill hdg-answer-eval, belum ada di v1).
+ */
 
-> Ini baseline yang **di-diff**, bukan ditulis ulang. Setiap aturan di bawah ada
-> karena satu kasus kegagalan nyata. Menghapus satu baris tanpa sengaja adalah
-> cara paling umum kualitas jawaban turun tanpa ketahuan.
->
-> Setiap perubahan wajib disertai kasus baru di golden set.
-
-Disimpan di `apps/web/lib/llm/system-prompt.ts` sebagai `BASE_PROMPT`.
-
-```text
-Kamu adalah GalvaAI, asisten teknis hot dip galvanizing (batch/after-fabrication).
+export const BASE_PROMPT = `Kamu adalah GalvaAI, asisten teknis hot dip galvanizing (batch/after-fabrication).
 Gaya: seperti metallurgical engineer senior — jelas, praktis, jujur soal batasan.
 
 ATURAN SUMBER
@@ -65,37 +61,10 @@ ATURAN SUMBER PENGETAHUAN
 
 BAHASA
 - Jawab dalam Bahasa Indonesia; pertahankan istilah teknis Inggris
-  (mis. "wet storage stain", "venting") dengan penjelasan singkat.
-```
+  (mis. "wet storage stain", "venting") dengan penjelasan singkat.`;
 
-## Catatan per blok
+export type SelectedStandard = "ASTM_A123" | "ISO1461" | "ASNZS4680" | null;
 
-**ATURAN SUMBER** — "Jangan mengarang angka" bukan basa-basi. Model yang tidak
-menemukan angka di konteks cenderung menghasilkan angka yang plausibel; di
-domain ini angka plausibel yang salah berujung sengketa inspeksi.
-
-**Larangan URL karangan** ditambahkan setelah ditemukan langsung saat testing
-live (gpt-5.5): model menjawab pertanyaan ASTM A123 dengan benar lewat tool,
-lalu menambahkan sitasi `[AGA] https://galvanizeit.org/knowledgebase/article/astm-specifications`
-padahal `<context>` kosong (tidak ada dokumen ditemukan) dan URL itu tidak
-pernah muncul di retrieval manapun pada turn itu. Sekadar menulis "jawab
-hanya berdasarkan context" tidak cukup mencegah ini -- modelnya tetap
-menghasilkan URL yang *terdengar* masuk akal dari pengetahuan umum. Larangan
-eksplisit "JANGAN PERNAH menuliskan URL dari ingatanmu sendiri" adalah yang
-akhirnya menutup celah ini di pengujian ulang.
-
-**ATURAN STANDAR** — blok terpanjang karena inilah sumber kesalahan paling
-mahal. Baris tentang Appendix X1.1 ada karena model cenderung memilih kategori
-dari tampilan produk ("ini kelihatan seperti pipa") alih-alih dari cara
-pembuatannya (pole dari plat bending = PLATE).
-
-**"Satu grade di bawah" dari Table 2** — model yang menebak akan mengambil nilai
-sebelumnya di Table 1 (75), padahal jawabannya 85 yang hanya ada di Table 2.
-
-**ATURAN KESELAMATAN** — venting disebut lebih dulu karena konsekuensinya
-ledakan, bukan cacat coating.
-
-**ATURAN SUMBER PENGETAHUAN** — ditambahkan setelah proyek diputuskan sebagai
-portofolio & edukasi (bukan komersial): model perlu tahu secara eksplisit
-kenapa `unverified: true` tidak akan pernah hilang, supaya tidak menyiratkan
-ke user bahwa status itu sementara.
+export function buildSystemPrompt(selectedStandard: SelectedStandard): string {
+  return `${BASE_PROMPT}\n<selected_standard>${selectedStandard ?? "BELUM_DIPILIH"}</selected_standard>`;
+}

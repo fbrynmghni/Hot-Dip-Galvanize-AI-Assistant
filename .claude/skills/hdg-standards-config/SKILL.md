@@ -17,9 +17,12 @@ bagaimana angka standar masuk, berubah, dan diverifikasi di GalvaAI.
 
 Tidak pernah terbalik. Saat sebuah angka atau batas berubah:
 
-1. Verifikasi ke **dokumen standar asli** yang dimiliki secara sah (ASTM/ISO/AS-NZS
-   yang dibeli, atau artikel resmi AGA/GAA untuk ringkasan revisi). Catat edisi
-   persisnya.
+1. Verifikasi ke **artikel terbuka di website** (AGA, GAA, atau asosiasi
+   galvanizing nasional sejenis yang mempublikasikan ringkasan tabel secara
+   gratis). Proyek ini portofolio & edukasi — **tidak membeli/memakai teks
+   ASTM/ISO/AS-NZS berbayar**, sekalipun itu berarti angka tidak pernah naik
+   status dari `unverified`. Catat URL sumber dan edisi persisnya di
+   `_sources`/`source_url` pada file config.
 2. Update/ tambah **unit test titik batas** yang mencerminkan angka baru. Test
    harus gagal dulu.
 3. Baru ubah file config sampai test hijau.
@@ -57,6 +60,12 @@ Config dengan salah satu field masih placeholder = **blocker rilis**, bukan TODO
 Selama belum terverifikasi, tool yang membacanya wajib menyertakan flag
 `unverified: true` di outputnya dan UI menampilkan peringatan. Jangan pernah
 diam-diam menyajikan angka yang belum dicek sebagai fakta.
+
+Karena proyek ini hanya memakai sumber terbuka (lihat aturan #1), `verified_by`/
+`verified_at` kemungkinan **tidak akan pernah terisi** — itu status yang
+diterima, bukan kegagalan. Yang wajib tetap terjaga adalah disiplinnya: flag
+`unverified: true` dan disclaimer tetap tampil ke pengguna selamanya, bukan
+dihilangkan begitu sumber terbuka "terasa cukup meyakinkan".
 
 **5. Sel kosong bukan izin menebak.**
 

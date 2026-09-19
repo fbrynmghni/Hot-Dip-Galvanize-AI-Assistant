@@ -38,24 +38,75 @@ berbeda — tergantung standar dan kategori materialnya.
 
 ## Status
 
-**Fase 0 — Persiapan.** Blueprint dan disiplin engineering sudah terkunci
-sebagai skill; aplikasinya belum di-scaffold.
+**Fase 0 — Persiapan**, hampir selesai. Blueprint dan disiplin engineering
+sudah terkunci sebagai skill; aplikasinya belum di-scaffold.
 
-- [x] Blueprint teknis & produk
-- [x] Skill engineering (6 skill + referensi + template)
-- [x] Config standar awal (ASTM A123, ISO 1461, AS/NZS 4680, ISO 9223) — **belum diverifikasi**
-- [ ] Verifikasi tabel standar ke dokumen asli
-- [ ] Review Terms of Use AGA/GAA & permohonan izin
-- [ ] Scaffold aplikasi Next.js
-- [ ] Kalkulator + unit test titik batas
-- [ ] Pipeline ingestion & retrieval
-- [ ] Chat orchestrator
-- [ ] Deployment
+| # | Item | Status | Catatan |
+|---|---|---|---|
+| 0.1 | Blueprint teknis & produk | ✅ Selesai | `docs/blueprint-v1.md` |
+| 0.2 | Skill engineering (6 skill + referensi + template) | ✅ Selesai | `.claude/skills/` |
+| 0.3 | Config standar awal (draft) | ✅ Selesai | ASTM A123, ISO 1461, AS/NZS 4680, ISO 9223 |
+| 0.4 | Sitasi sumber terbuka (bukan teks standar berbayar) | ✅ Selesai | AGA/GAA/UK Galvanizers Association, lihat `references/iso-asnzs.md` |
+| 0.5 | Verifikasi resmi (`verified_by`/`verified_at`) | ⬜ Belum | Butuh sign-off engineer yang pegang salinan sah, **atau** proyek berjalan permanen dengan status `unverified` |
+| 0.6 | Ambiguitas batas 1,5 mm ISO 1461 | ⬜ Belum | 2 sumber terbuka berbeda arah; sudah di-flag sebagai unconfirmed test case |
+| 0.7 | Review Terms of Use AGA & Disclaimer GAA | 🟡 Sebagian | Sudah dibaca — lihat ringkasan di bawah. Email permohonan izin **belum dikirim** |
+| 0.8 | Scaffold aplikasi Next.js | ✅ Selesai | `apps/web` (Next.js 15 + TS + Tailwind), `packages/engineering-config`, `workers/ingest`, `eval` — lihat "Struktur repo" |
 
 > ⚠️ **Angka standar di repo ini belum diverifikasi.** Semua config ditandai
 > `"unverified": true` dan `verified_by: null`. Selama flag itu ada, output tool
 > wajib membawanya sampai ke jawaban. Jangan dipakai sebagai dasar keputusan
 > inspeksi sebelum diverifikasi ke edisi standar yang dimiliki secara sah.
+
+### Fase 1 — MVP
+
+| # | Item | Status |
+|---|---|---|
+| 1.1 | Ingestion AGA (crawl → clean → chunk → embed) | 🟡 Pipeline selesai, belum dijalankan sungguhan | `workers/ingest/`, 36 test lulus. GAA ditunda (robots.txt anti-scraping). Storage masih JSON lokal, belum Postgres/pgvector. Butuh `CRAWLER_CONTACT_EMAIL` sebelum crawl nyata |
+| 1.2 | Chat RAG + tool calling + sitasi | ✅ Orchestrator selesai, diverifikasi live ke gpt-5.5 | `/api/chat`, `lib/llm/`, `lib/rag/`; 80 test JS + 37 test Python lulus. Retrieval lokal (BM25+cosine) atas `.cache/` yang masih kosong (belum crawl) — jawaban jujur "no_context" sampai ada data. UI chat & streaming belum dibangun |
+| 1.3 | 3 kalkulator (thickness, durability, reactivity) | ✅ Logic + API selesai | `apps/web/lib/tools/`, `/api/tools/[name]`; 52 test lulus. UI form kalkulator (`/tools` masih halaman info) belum dibangun |
+| 1.4 | 10 halaman knowledge hub | ⬜ Belum |
+
+### Fase 2 — Kualitas
+
+| # | Item | Status |
+|---|---|---|
+| 2.1 | Hybrid search + re-ranking | ⬜ Belum |
+| 2.2 | Golden set 150 kasus | ⬜ Belum |
+| 2.3 | Dashboard eval (faithfulness, citation accuracy) | ⬜ Belum |
+| 2.4 | Glosarium ID–EN | ⬜ Belum |
+
+### Fase 3 — Pro features
+
+| # | Item | Status |
+|---|---|---|
+| 3.1 | Vent hole advisor | ⬜ Belum |
+| 3.2 | Defect photo triage | ⬜ Belum |
+| 3.3 | Export laporan PDF | ⬜ Belum |
+| 3.4 | Konteks Indonesia (SNI, harga lokal) | ⬜ Belum |
+
+### Fase 4 — dihapus
+
+Proyek ini portofolio & edukasi, bukan produk komersial — **tidak ada rencana
+monetisasi**. Fase "Monetisasi (opsional)" di roadmap versi awal sudah
+dihapus dari cakupan.
+
+### Ringkasan Terms of Use / Disclaimer (dibaca 2026-09-16, belum ada izin tertulis)
+
+- **AGA** ([Terms of Use](https://galvanizeit.org/about-aga/terms-of-use)) —
+  memegang hak cipta (`© 2026 AGA`); konten "general information only";
+  mereferensikan dokumen terpisah "Copyright and Proprietary Information Use
+  Policy" yang tidak ditemukan teksnya secara publik. Tidak ada klausul
+  eksplisit soal crawling otomatis atau penggunaan oleh AI di teks yang
+  terbaca. AGA sendiri secara eksplisit menyatakan tidak mendistribusikan
+  ulang teks standar ASTM/ISO/AMPP berbayar — sejalan dengan aturan #12 di
+  `CLAUDE.md`.
+- **GAA** ([Disclaimer](https://gaa.com.au/disclaimer/)) — hanya berisi
+  pembatasan tanggung jawab (liability), tidak ada klausul reuse/copyright
+  eksplisit di halaman ini. Hak cipta default tetap berlaku meski tidak
+  dinyatakan ulang.
+- **Belum dilakukan:** mengirim email permohonan izin resmi ke AGA & GAA
+  (lihat `hdg-rag-ingest/references/legal.md` §1). Ini keputusan yang perlu
+  persetujuan pemilik proyek sebelum dikirim atas nama proyek/organisasi.
 
 ---
 
@@ -63,17 +114,30 @@ sebagai skill; aplikasinya belum di-scaffold.
 
 ```
 .
-├── CLAUDE.md                 # Aturan aktif + arsitektur (dibaca tiap sesi)
+├── CLAUDE.md                      # Aturan aktif + arsitektur (dibaca tiap sesi)
 ├── docs/
-│   └── blueprint-v1.md       # Blueprint naratif utuh (arsip)
-└── .claude/skills/           # Disiplin engineering sebagai skill
-    ├── hdg-standards-config/ # Tabel standar & prosedur verifikasi
-    ├── hdg-engineering-tool/ # Resep kalkulator deterministik
-    ├── hdg-rag-ingest/       # Crawl, chunking, retrieval, legal
-    ├── hdg-chat-guardrails/  # System prompt, tool calling, guardrail
-    ├── hdg-content-writer/   # Konten knowledge hub
-    └── hdg-answer-eval/      # Golden set & metrik kualitas
+│   └── blueprint-v1.md            # Blueprint naratif utuh (arsip)
+├── .claude/skills/                # Disiplin engineering sebagai skill
+│   ├── hdg-standards-config/      # Tabel standar & prosedur verifikasi
+│   ├── hdg-engineering-tool/      # Resep kalkulator deterministik
+│   ├── hdg-rag-ingest/            # Crawl, chunking, retrieval, legal
+│   ├── hdg-chat-guardrails/       # System prompt, tool calling, guardrail
+│   ├── hdg-content-writer/        # Konten knowledge hub
+│   └── hdg-answer-eval/           # Golden set & metrik kualitas
+├── apps/web/                      # Next.js 15 + TypeScript + Tailwind
+│   ├── app/(hub)/learn/[slug]/    # halaman artikel
+│   ├── app/chat/                  # UI chat
+│   ├── app/tools/                 # kalkulator
+│   ├── app/api/chat/route.ts
+│   ├── app/api/tools/[name]/route.ts
+│   └── tests/                     # vitest (belum ada test — lihat hdg-engineering-tool)
+├── packages/engineering-config/   # tabel standar (JSON, versioned) — sumber angka
+├── workers/ingest/                # crawler & embedder (belum diimplementasikan)
+└── eval/                          # golden Q&A + skrip metrik (belum diimplementasikan)
 ```
+
+Jalankan `npm install` di root, lalu `npm run dev` untuk apps/web (npm
+workspaces, bukan pnpm/yarn).
 
 Setelah scaffolding, akan bertambah:
 
